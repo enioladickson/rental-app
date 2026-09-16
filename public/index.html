@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rental Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest-900:#152318;
+    --forest-800:#1D2E21;
+    --forest-700:#2B412F;
+    --cream:#FBF7EC;
+    --paper:#FFFFFF;
+    --ink:#1F241B;
+    --ink-soft:#666B5C;
+    --gold:#D9A441;
+    --gold-dark:#B9852B;
+    --gold-tint:#F5E6C4;
+    --line:#E9E2D0;
+    --error:#B14B34;
+    --shadow-lg:0 24px 60px -20px rgba(21,35,24,0.35);
+    --shadow-sm:0 2px 10px rgba(21,35,24,0.06);
+    --radius-lg:22px;
+    --radius-md:12px;
+    --radius-sm:9px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    margin:0;
+    color:var(--ink);
+  }
+  a{color:var(--forest-700);}
+
+  /* ================= HERO ================= */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(circle at 12% 18%, rgba(217,164,65,0.16), transparent 42%),
+      radial-gradient(circle at 88% 8%, rgba(217,164,65,0.10), transparent 38%),
+      linear-gradient(165deg, var(--forest-900) 0%, var(--forest-800) 55%, var(--forest-700) 100%);
+    padding:30px 32px 50px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size:22px 22px;
+    pointer-events:none;
+  }
+  .brand-row{
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:relative;
+    z-index:2;
+  }
+  .brand-mark{
+    width:30px; height:30px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--gold);
+    border-radius:8px;
+    flex-shrink:0;
+  }
+  .brand-name{
+    font-family:'Fraunces', serif;
+    color:var(--cream);
+    font-size:15px;
+    letter-spacing:0.02em;
+    font-weight:600;
+  }
+
+  .hero-inner{
+    max-width:1100px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    padding-top:56px;
+    position:relative;
+    z-index:2;
+  }
+  .eyebrow-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(217,164,65,0.16);
+    border:1px solid rgba(217,164,65,0.4);
+    color:var(--gold);
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    padding:7px 14px;
+    border-radius:999px;
+    margin-bottom:20px;
+  }
+  .eyebrow-pill svg{width:13px; height:13px;}
+  .hero-text h1{
+    font-size:clamp(32px,4.6vw,54px);
+    line-height:1.08;
+    max-width:11ch;
+    color:var(--cream);
+    font-weight:700;
+  }
+  .hero-text h1 em{
+    font-style:normal;
+    color:var(--gold);
+  }
+  .hero-text p{
+    margin-top:18px;
+    max-width:44ch;
+    color:rgba(251,247,236,0.72);
+    font-size:16px;
+  }
+  .trust-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:26px;
+  }
+  .trust-chip{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    color:rgba(251,247,236,0.85);
+    font-size:12.5px;
+    padding:8px 13px;
+    border-radius:999px;
+  }
+  .trust-chip svg{width:14px; height:14px; color:var(--gold);}
+
+  .hero-illustration{
+    flex-shrink:0;
+    width:300px;
+    height:auto;
+  }
+  @media (max-width:860px){
+    .hero-illustration{display:none;}
+    .hero-inner{justify-content:flex-start;}
+  }
+
+  /* Wave divider between hero and content */
+  .hero-wave{
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    line-height:0;
+    z-index:1;
+  }
+  .hero-wave svg{width:100%; height:90px; display:block;}
+
+  /* ================= TOP NAV ================= */
+  .topnav{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    box-shadow:var(--shadow-sm);
+  }
+  .topnav-inner{
+    max-width:900px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .steps{
+    list-style:none;
+    margin:0;
+    padding:9px 0;
+    display:flex;
+    gap:5px;
+    overflow-x:auto;
+    scrollbar-width:thin;
+    -webkit-overflow-scrolling:touch;
+  }
+  .steps::-webkit-scrollbar{height:5px;}
+  .steps::-webkit-scrollbar-thumb{background:var(--line); border-radius:99px;}
+  .steps li{flex-shrink:0;}
+  .steps a{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    text-decoration:none;
+    color:var(--ink-soft);
+    font-size:13px;
+    font-weight:500;
+    padding:8px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+    transition:background .2s ease, color .2s ease;
+  }
+
+  /* ================= LAYOUT ================= */
+  .layout{
+    max-width:900px;
+    margin:0 auto;
+    padding:40px 24px 100px;
+    position:relative;
+    z-index:3;
+  }
+  .steps a .icon-dot{
+    width:26px; height:26px;
+    border-radius:8px;
+    background:var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    color:var(--forest-700);
+    transition:background .2s ease, color .2s ease;
+  }
+  .steps a .icon-dot svg{width:14px; height:14px;}
+  .steps a:hover{background:rgba(43,65,47,0.06);}
+  .steps a.active{
+    color:var(--ink);
+    background:var(--gold-tint);
+  }
+  .steps a.active .icon-dot{
+    background:var(--gold);
+    color:var(--forest-900);
+  }
+
+  /* ================= CARD / FORM ================= */
+  .card{
+    background:var(--paper);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-lg);
+    overflow:hidden;
+  }
+  section.block{
+    padding:40px 44px;
+    border-bottom:1px solid var(--line);
+    opacity:1;
+  }
+  section.block:last-of-type{border-bottom:none;}
+
+  .block-head{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    margin-bottom:6px;
+  }
+  .block-icon{
+    width:46px; height:46px;
+    border-radius:13px;
+    background:linear-gradient(155deg, var(--gold-tint), #FFFFFF);
+    border:1px solid rgba(217,164,65,0.35);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--forest-700);
+    flex-shrink:0;
+  }
+  .block-icon svg{width:21px; height:21px;}
+  .block-head .head-text .step-label{
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:0.09em;
+    color:var(--gold-dark);
+    font-weight:600;
+    display:block;
+    margin-bottom:2px;
+  }
+  .block-head h2{font-size:22px;}
+  .block-desc{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin:10px 0 26px;
+    max-width:60ch;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:18px 20px;
+  }
+  .grid.thirds{grid-template-columns:repeat(3,1fr);}
+  .span-2{grid-column:span 2;}
+
+  .field label{
+    display:block;
+    font-size:13px;
+    font-weight:600;
+    margin-bottom:7px;
+    color:var(--ink);
+  }
+  .field .hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:400;
+    display:block;
+    margin-top:2px;
+  }
+  input[type=text],
+  input[type=email],
+  input[type=tel],
+  input[type=number],
+  input[type=date],
+  input[type=time],
+  select,
+  textarea{
+    width:100%;
+    padding:12px 14px;
+    border:1.5px solid var(--line);
+    background:var(--cream);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14.5px;
+    color:var(--ink);
+    border-radius:var(--radius-sm);
+    transition:border-color .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  input:focus, select:focus, textarea:focus{
+    outline:none;
+    border-color:var(--gold);
+    background:var(--paper);
+    box-shadow:0 0 0 4px rgba(217,164,65,0.18);
+  }
+  textarea{resize:vertical; min-height:84px;}
+  .money-wrap{position:relative;}
+  .money-wrap .prefix{
+    position:absolute;
+    left:14px; top:50%;
+    transform:translateY(-50%);
+    color:var(--ink-soft);
+    font-size:14.5px;
+  }
+  .money-wrap input{padding-left:26px;}
+
+  fieldset{border:none; padding:0; margin:0;}
+  .radio-row, .check-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .radio-row label, .check-row label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    border:1.5px solid var(--line);
+    padding:10px 16px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    background:var(--cream);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .radio-row input, .check-row input{accent-color:var(--forest-700);}
+  .radio-row label:has(input:checked), .check-row label:has(input:checked){
+    border-color:var(--gold);
+    background:var(--gold-tint);
+  }
+
+  .voucher-panel, .pet-panel, .crime-panel{
+    margin-top:18px;
+    padding:20px;
+    border-radius:var(--radius-md);
+    border:1.5px dashed rgba(217,164,65,0.5);
+    background:linear-gradient(155deg, rgba(217,164,65,0.07), transparent);
+    display:none;
+  }
+  .voucher-panel.show, .pet-panel.show, .crime-panel.show{display:block;}
+
+  .note{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:16px;
+    padding-top:16px;
+    border-top:1px dashed var(--line);
+    display:flex;
+    gap:8px;
+  }
+  .note svg{width:15px; height:15px; flex-shrink:0; margin-top:1px; color:var(--gold-dark);}
+
+  .sig-row{
+    display:flex;
+    gap:24px;
+    align-items:flex-end;
+    flex-wrap:wrap;
+  }
+  .sig-field{flex:1; min-width:240px;}
+  .sig-input{
+    font-family:'Caveat', cursive;
+    font-size:30px;
+    border:none;
+    border-bottom:2px solid var(--ink);
+    background:transparent;
+    width:100%;
+    padding:8px 4px;
+    border-radius:0;
+  }
+  .sig-input:focus{outline:none; border-color:var(--gold); box-shadow:none;}
+  .date-field{width:170px;}
+
+  .consent{
+    background:var(--cream);
+    border-radius:var(--radius-md);
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .consent label{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    margin-bottom:12px;
+  }
+  .consent label:last-child{margin-bottom:0;}
+  .consent input{margin-top:3px; accent-color:var(--forest-700);}
+
+  .form-status{
+    display:none;
+    margin:0 44px;
+    padding:14px 18px;
+    font-size:13.5px;
+    border-radius:var(--radius-sm);
+    font-weight:500;
+  }
+  .form-status.show{display:block;}
+  .form-status.error{
+    background:rgba(177,75,52,0.08);
+    border:1.5px solid var(--error);
+    color:var(--error);
+  }
+  .form-status.loading{
+    background:var(--gold-tint);
+    border:1.5px solid var(--gold);
+    color:var(--forest-900);
+  }
+
+  .submit-bar{
+    padding:34px 44px 44px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    flex-wrap:wrap;
+    background:linear-gradient(180deg, transparent, rgba(217,164,65,0.05));
+  }
+  .btn{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    padding:14px 28px;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+  }
+  .btn:disabled{opacity:0.6; cursor:not-allowed;}
+  .btn-primary{
+    background:linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color:var(--forest-900);
+    box-shadow:0 10px 24px -8px rgba(185,133,43,0.55);
+  }
+  .btn-primary:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 14px 28px -8px rgba(185,133,43,0.65);}
+  .btn-ghost{
+    background:transparent;
+    color:var(--forest-700);
+    border:1.5px solid var(--line);
+  }
+  .btn-ghost:hover{border-color:var(--forest-700);}
+  .submit-hint{font-size:12.5px; color:var(--ink-soft);}
+
+  .required-mark{color:var(--gold-dark);}
+
+  .confirm-panel{
+    display:none;
+    max-width:1100px;
+    margin:60px auto 100px;
+    padding:0 32px;
+  }
+  .confirm-panel.show{display:block;}
+  .confirm-card{
+    background:var(--paper);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-lg);
+    padding:56px 40px;
+    text-align:center;
+  }
+  .confirm-icon{
+    width:64px; height:64px;
+    margin:0 auto 20px;
+    border-radius:50%;
+    background:var(--gold-tint);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .confirm-card h2{font-size:27px; margin-bottom:10px;}
+  .confirm-card p{color:var(--ink-soft); max-width:50ch; margin:0 auto;}
+
+  .field.invalid input,
+  .field.invalid select,
+  .field.invalid textarea{
+    border-color:var(--error);
+  }
+  .field .error-msg{
+    display:none;
+    color:var(--error);
+    font-size:12px;
+    margin-top:5px;
+    font-weight:500;
+  }
+  .field.invalid .error-msg{display:block;}
+
+  /* Scroll reveal */
+  [data-section]{
+    transform:translateY(14px);
+    opacity:0;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  [data-section].in-view{
+    transform:translateY(0);
+    opacity:1;
+  }
+  @media (prefers-reduced-motion:reduce){
+    [data-section]{transform:none; opacity:1; transition:none;}
+  }
+
+  /* =========================================================
+     MEDIA QUERIES
+     ========================================================= */
+  @media (max-width:1024px){
+    .hero-illustration{width:240px;}
+  }
+
+  @media (max-width:860px){
+    .hero{padding:24px 22px 40px;}
+    .topnav-inner{padding:0 16px;}
+  }
+
+  @media (max-width:700px){
+    .grid, .grid.thirds{grid-template-columns:1fr 1fr;}
+    section.block{padding:32px 26px;}
+  }
+
+  @media (max-width:600px){
+    .layout{padding:24px 16px 80px;}
+    .hero{padding:20px 18px 34px;}
+    .grid, .grid.thirds{grid-template-columns:1fr;}
+    .span-2{grid-column:span 1;}
+    section.block{padding:28px 20px;}
+    .hero-text h1{max-width:none; font-size:30px;}
+    .submit-bar{padding:26px 20px 34px; flex-direction:column; align-items:stretch;}
+    .submit-bar .btn{width:100%;}
+    .submit-bar div{display:flex; flex-direction:column; gap:10px;}
+    .btn-ghost{margin-left:0 !important;}
+    .form-status{margin:0 20px;}
+    .sig-row{flex-direction:column; align-items:stretch;}
+    .date-field{width:100%;}
+    .confirm-card{padding:40px 24px;}
+  }
+
+  @media (max-width:400px){
+    .hero-text h1{font-size:26px;}
+    .radio-row label, .check-row label{flex:1 1 100%; justify-content:flex-start;}
+    .block-head{flex-wrap:wrap;}
+  }
+
+  @media print{
+    .topnav, .submit-bar .btn-ghost, .hero-illustration, .form-status{display:none !important;}
+    body{background:#fff;}
+    .hero{padding-bottom:40px;}
+    .card{box-shadow:none; border-radius:0;}
+    section.block{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="brand-row">
+    <div class="brand-mark">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 12L12 5L20 12" stroke="#152318" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 11V19H18V11" stroke="#152318" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <span class="brand-name">Rental Application</span>
+  </div>
+
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="eyebrow-pill">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7V12L15 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Takes about 10 minutes
+      </div>
+      <h1>Let's find your <em>next front door</em></h1>
+      <p>Complete every section below as accurately as possible — it helps us process your application quickly and get you closer to move-in day.</p>
+      <div class="trust-row">
+        <div class="trust-chip">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L20 6V11C20 16 16.5 19.5 12 21C7.5 19.5 4 16 4 11V6L12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          Secure &amp; confidential
+        </div>
+        <div class="trust-chip">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="15" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3V7M16 3V7M3 10H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Reviewed within 48 hours
+        </div>
+      </div>
+    </div>
+
+    <svg class="hero-illustration" viewBox="0 0 320 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="255" cy="55" r="30" fill="#D9A441" opacity="0.9"/>
+      <path d="M20 190C20 190 60 150 100 190" stroke="#3E5842" stroke-width="4" fill="none" opacity="0.5"/>
+      <ellipse cx="160" cy="235" rx="140" ry="14" fill="#0E1A11" opacity="0.25"/>
+      <path d="M55 150L160 70L265 150" stroke="#F5E6C4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="72" y="150" width="176" height="82" rx="4" fill="#2B412F"/>
+      <rect x="72" y="150" width="176" height="82" rx="4" stroke="#F5E6C4" stroke-width="4"/>
+      <rect x="140" y="182" width="40" height="50" fill="#D9A441"/>
+      <circle cx="171" cy="207" r="2.4" fill="#2B412F"/>
+      <rect x="92" y="168" width="32" height="32" rx="3" fill="#FBF7EC" opacity="0.92"/>
+      <line x1="108" y1="168" x2="108" y2="200" stroke="#2B412F" stroke-width="2.5"/>
+      <line x1="92" y1="184" x2="124" y2="184" stroke="#2B412F" stroke-width="2.5"/>
+      <rect x="196" y="168" width="32" height="32" rx="3" fill="#FBF7EC" opacity="0.92"/>
+      <line x1="212" y1="168" x2="212" y2="200" stroke="#2B412F" stroke-width="2.5"/>
+      <line x1="196" y1="184" x2="228" y2="184" stroke="#2B412F" stroke-width="2.5"/>
+      <rect x="228" y="95" width="14" height="34" fill="#F5E6C4"/>
+      <path d="M20 232H300" stroke="#F5E6C4" stroke-width="4" stroke-linecap="round" opacity="0.5"/>
+      <path d="M245 210C255 200 270 200 278 210" stroke="#F5E6C4" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+    </svg>
+  </div>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,90 1440,40 L1440,90 L0,90 Z" fill="#FBF7EC"/></svg>
+  </div>
+</header>
+
+<nav class="topnav" aria-label="Form sections">
+  <div class="topnav-inner">
+    <ul class="steps" id="stepsNav">
+      <li><a href="#sec-contact" class="active"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 7L12 13L21 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Contact</a></li>
+      <li><a href="#sec-tour"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3V7M16 3V7M3 10H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Tour</a></li>
+      <li><a href="#sec-movein"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="15" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M11 12L20 3M20 3H16M20 3V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Move-in &amp; lease</a></li>
+      <li><a href="#sec-income"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7V17M15 9.5C15 8.1 13.7 7 12 7C10.3 7 9 8.1 9 9.5C9 10.9 10.3 11.5 12 12C13.7 12.5 15 13.1 15 14.5C15 15.9 13.7 17 12 17C10.3 17 9 15.9 9 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Income</a></li>
+      <li><a href="#sec-household"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20C3 16.5 5.5 14 9 14C12.5 14 15 16.5 15 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17" cy="9" r="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M15 20C15 17.5 16 15.5 18 14.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>Household</a></li>
+      <li><a href="#sec-pets"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="5.5" cy="12.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="18.5" cy="12.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="16.5" rx="4.5" ry="3.5" stroke="currentColor" stroke-width="1.6"/></svg></span>Pets</a></li>
+      <li><a href="#sec-personal"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 16C6 14.3 7.3 13.5 9 13.5C10.7 13.5 12 14.3 12 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M15 10H18M15 13H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>Personal</a></li>
+      <li><a href="#sec-history"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L19 6V11C19 15.4 16 18.7 12 20C8 18.7 5 15.4 5 11V6L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 11.5L11 13.5L15 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Background</a></li>
+      <li><a href="#sec-employment"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 8V6C8 4.9 8.9 4 10 4H14C15.1 4 16 4.9 16 6V8" stroke="currentColor" stroke-width="1.8"/></svg></span>Employment</a></li>
+      <li><a href="#sec-emergency"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4C6 4 4 6 4 9C4 14 10 20 15 20C18 20 20 18 20 18L16.5 14.5C16.5 14.5 15 15.5 14 15C12.5 14.3 9.7 11.5 9 10C8.5 9 9.5 7.5 9.5 7.5L6 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span>Emergency</a></li>
+      <li><a href="#sec-payment"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10H21" stroke="currentColor" stroke-width="1.8"/></svg></span>Payment</a></li>
+      <li><a href="#sec-signature"><span class="icon-dot"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20C7 20 7 14 10 14C13 14 13 20 16 20C18 20 18.5 17 20 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 6L19 10L9 20H5V16L15 6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>Signature</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="layout">
+  <form class="card" id="rentalForm" novalidate>
+
+    <!-- 01 Contact -->
+    <section class="block" id="sec-contact" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 7L12 13L21 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 01</span><h2>Contact information</h2></div>
+      </div>
+      <p class="block-desc">How should we reach you about your application and the tour?</p>
+      <div class="grid">
+        <div class="field span-2">
+          <label>Full legal name <span class="required-mark">*</span></label>
+          <input type="text" name="fullName" required>
+          <div class="error-msg">Enter your full legal name.</div>
+        </div>
+        <div class="field">
+          <label>Email address <span class="required-mark">*</span></label>
+          <input type="email" name="email" required>
+          <div class="error-msg">Enter a valid email address.</div>
+        </div>
+        <div class="field">
+          <label>Phone number <span class="required-mark">*</span></label>
+          <input type="tel" name="phone" placeholder="(555) 555-5555" required>
+          <div class="error-msg">Enter a phone number.</div>
+        </div>
+        <div class="field span-2">
+          <label>Preferred contact method</label>
+          <div class="radio-row">
+            <label><input type="radio" name="contactMethod" value="Email" checked>Email</label>
+            <label><input type="radio" name="contactMethod" value="Phone call">Phone call</label>
+            <label><input type="radio" name="contactMethod" value="Text">Text</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Tour -->
+    <section class="block" id="sec-tour" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 3V7M16 3V7M3 10H21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 02</span><h2>Request a tour</h2></div>
+      </div>
+      <p class="block-desc">Tell us when you'd like to see the property.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Preferred tour date</label>
+          <input type="date" name="tourDate">
+        </div>
+        <div class="field">
+          <label>Preferred tour time</label>
+          <input type="time" name="tourTime">
+        </div>
+        <div class="field span-2">
+          <label>Tour type</label>
+          <div class="radio-row">
+            <label><input type="radio" name="tourType" value="In person" checked>In person</label>
+            <label><input type="radio" name="tourType" value="Virtual">Virtual</label>
+            <label><input type="radio" name="tourType" value="Self-guided">Self-guided</label>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label>Alternate date <span class="hint">Optional, in case your first choice isn't available</span></label>
+          <input type="date" name="tourAltDate">
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Move-in & lease -->
+    <section class="block" id="sec-movein" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="15" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M11 12L20 3M20 3H16M20 3V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 03</span><h2>Move-in &amp; lease term</h2></div>
+      </div>
+      <p class="block-desc">Your ideal timeline and how long you'd like to stay.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Preferred move-in date <span class="required-mark">*</span></label>
+          <input type="date" name="moveInDate" required>
+          <div class="error-msg">Choose a preferred move-in date.</div>
+        </div>
+        <div class="field">
+          <label>Earliest possible move-in date <span class="hint">Optional</span></label>
+          <input type="date" name="moveInEarliest">
+        </div>
+        <div class="field span-2">
+          <label>Preferred lease duration <span class="required-mark">*</span></label>
+          <select name="leaseDuration" required>
+            <option value="">Select one</option>
+            <option>Month-to-month</option>
+            <option>6 months</option>
+            <option>12 months</option>
+            <option>18 months</option>
+            <option>24 months</option>
+            <option>Other</option>
+          </select>
+          <div class="error-msg">Choose a lease duration.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Household income -->
+    <section class="block" id="sec-income" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7V17M15 9.5C15 8.1 13.7 7 12 7C10.3 7 9 8.1 9 9.5C9 10.9 10.3 11.5 12 12C13.7 12.5 15 13.1 15 14.5C15 15.9 13.7 17 12 17C10.3 17 9 15.9 9 14.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 04</span><h2>Household income</h2></div>
+      </div>
+      <p class="block-desc">Include income for everyone 18 or older who will live in the home.</p>
+      <div class="grid">
+        <div class="field span-2">
+          <label>Annual household income before taxes <span class="required-mark">*</span> <span class="hint">Do not include housing vouchers here</span></label>
+          <div class="money-wrap">
+            <span class="prefix">$</span>
+            <input type="number" name="householdIncome" min="0" step="1" required>
+          </div>
+          <div class="error-msg">Enter your annual household income.</div>
+        </div>
+        <div class="field span-2">
+          <label class="check-row" style="border:none; padding:0; display:flex;">
+            <input type="checkbox" id="hasVoucher" name="hasVoucher">
+            I receive a housing voucher
+          </label>
+        </div>
+      </div>
+      <div class="voucher-panel" id="voucherPanel">
+        <div class="grid">
+          <div class="field">
+            <label>Voucher program name</label>
+            <input type="text" name="voucherProgram" placeholder="e.g. Section 8 / Housing Choice Voucher">
+          </div>
+          <div class="field">
+            <label>Voucher amount (monthly)</label>
+            <div class="money-wrap">
+              <span class="prefix">$</span>
+              <input type="number" name="voucherAmount" min="0" step="1">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Household size -->
+    <section class="block" id="sec-household" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M3 20C3 16.5 5.5 14 9 14C12.5 14 15 16.5 15 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17" cy="9" r="2.4" stroke="currentColor" stroke-width="1.8"/><path d="M15 20C15 17.5 16 15.5 18 14.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 05</span><h2>Household size</h2></div>
+      </div>
+      <p class="block-desc">Who will be living in the home, and how much space you need.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Number of people who will live in the home <span class="required-mark">*</span></label>
+          <input type="number" name="occupantCount" min="1" step="1" required>
+          <div class="error-msg">Enter the number of occupants.</div>
+        </div>
+        <div class="field">
+          <label>Number of bedrooms needed <span class="required-mark">*</span></label>
+          <select name="bedrooms" required>
+            <option value="">Select one</option>
+            <option>Studio</option>
+            <option>1 bedroom</option>
+            <option>2 bedrooms</option>
+            <option>3 bedrooms</option>
+            <option>4 bedrooms</option>
+            <option>5+ bedrooms</option>
+          </select>
+          <div class="error-msg">Choose a bedroom count.</div>
+        </div>
+        <div class="field span-2">
+          <label>Names and ages of other occupants <span class="hint">Optional</span></label>
+          <textarea name="occupantDetails" placeholder="e.g. Jordan Lee, 34; Sam Lee, 7"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Pets -->
+    <section class="block" id="sec-pets" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="8" cy="8" r="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="8" r="1.8" stroke="currentColor" stroke-width="1.6"/><circle cx="5.5" cy="12.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><circle cx="18.5" cy="12.5" r="1.6" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="16.5" rx="4.5" ry="3.5" stroke="currentColor" stroke-width="1.6"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 06</span><h2>Pets</h2></div>
+      </div>
+      <p class="block-desc">Let us know about any animals that will live with you.</p>
+      <div class="radio-row">
+        <label><input type="radio" name="hasPet" value="No" checked>No pets</label>
+        <label><input type="radio" name="hasPet" value="Yes">I have a pet</label>
+      </div>
+      <div class="pet-panel" id="petPanel">
+        <div class="grid">
+          <div class="field">
+            <label>Type of pet</label>
+            <input type="text" name="petType" placeholder="e.g. Dog, cat, bird">
+          </div>
+          <div class="field">
+            <label>Breed <span class="hint">Optional</span></label>
+            <input type="text" name="petBreed">
+          </div>
+          <div class="field">
+            <label>Weight <span class="hint">Optional</span></label>
+            <input type="text" name="petWeight" placeholder="e.g. 25 lbs">
+          </div>
+          <div class="field">
+            <label>Number of pets</label>
+            <input type="number" name="petCount" min="1" step="1">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Personal details -->
+    <section class="block" id="sec-personal" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="9" cy="11" r="2" stroke="currentColor" stroke-width="1.6"/><path d="M6 16C6 14.3 7.3 13.5 9 13.5C10.7 13.5 12 14.3 12 16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M15 10H18M15 13H18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 07</span><h2>Personal details</h2></div>
+      </div>
+      <p class="block-desc">Basic information we need on file for every applicant.</p>
+      <div class="grid">
+        <div class="field span-2">
+          <label>Current home address <span class="required-mark">*</span></label>
+          <input type="text" name="currentAddress" placeholder="Street, city, state, ZIP" required>
+          <div class="error-msg">Enter your current address.</div>
+        </div>
+        <div class="field">
+          <label>Date of birth <span class="required-mark">*</span></label>
+          <input type="date" name="dob" required>
+          <div class="error-msg">Enter your date of birth.</div>
+        </div>
+        <div class="field">
+          <label>Relationship status</label>
+          <select name="relationshipStatus">
+            <option value="">Prefer not to say</option>
+            <option>Single</option>
+            <option>Married</option>
+            <option>Domestic partnership</option>
+            <option>Divorced</option>
+            <option>Widowed</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Rental & background -->
+    <section class="block" id="sec-history" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3L19 6V11C19 15.4 16 18.7 12 20C8 18.7 5 15.4 5 11V6L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 11.5L11 13.5L15 9.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 08</span><h2>Rental &amp; background history</h2></div>
+      </div>
+      <p class="block-desc">Details about your current housing and background.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Current landlord name <span class="hint">Optional</span></label>
+          <input type="text" name="landlordName">
+        </div>
+        <div class="field">
+          <label>Current landlord phone <span class="hint">Optional</span></label>
+          <input type="tel" name="landlordPhone">
+        </div>
+        <div class="field span-2">
+          <label>Reason for moving <span class="hint">Optional</span></label>
+          <input type="text" name="reasonForMoving">
+        </div>
+        <div class="field span-2">
+          <label>Have you ever been convicted of a crime?</label>
+          <div class="radio-row">
+            <label><input type="radio" name="hasCrimeRecord" value="No" checked>No</label>
+            <label><input type="radio" name="hasCrimeRecord" value="Yes">Yes</label>
+          </div>
+        </div>
+      </div>
+      <div class="crime-panel" id="crimePanel">
+        <div class="field">
+          <label>Please explain</label>
+          <textarea name="crimeExplanation" placeholder="Include approximate date and nature of the offense."></textarea>
+        </div>
+      </div>
+      <p class="note">
+        <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 8V12.5M12 16H12.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        This information is reviewed individually and in accordance with applicable fair housing laws. A record does not automatically disqualify an application.
+      </p>
+    </section>
+
+    <!-- 09 Employment -->
+    <section class="block" id="sec-employment" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 8V6C8 4.9 8.9 4 10 4H14C15.1 4 16 4.9 16 6V8" stroke="currentColor" stroke-width="1.8"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 09</span><h2>Employment</h2></div>
+      </div>
+      <p class="block-desc">Where your income comes from.</p>
+      <div class="grid">
+        <div class="field">
+          <label>Employer name</label>
+          <input type="text" name="employerName">
+        </div>
+        <div class="field">
+          <label>Job title</label>
+          <input type="text" name="jobTitle">
+        </div>
+        <div class="field">
+          <label>Length of employment</label>
+          <input type="text" name="employmentLength" placeholder="e.g. 2 years 3 months">
+        </div>
+        <div class="field">
+          <label>Additional income source <span class="hint">Optional</span></label>
+          <input type="text" name="additionalIncomeSource" placeholder="e.g. freelance, alimony">
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 Emergency contact -->
+    <section class="block" id="sec-emergency" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4C6 4 4 6 4 9C4 14 10 20 15 20C18 20 20 18 20 18L16.5 14.5C16.5 14.5 15 15.5 14 15C12.5 14.3 9.7 11.5 9 10C8.5 9 9.5 7.5 9.5 7.5L6 4Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 10</span><h2>Emergency contact</h2></div>
+      </div>
+      <p class="block-desc">Someone we can reach if we're unable to reach you.</p>
+      <div class="grid thirds">
+        <div class="field">
+          <label>Full name</label>
+          <input type="text" name="emergencyName">
+        </div>
+        <div class="field">
+          <label>Relationship to you</label>
+          <input type="text" name="emergencyRelationship">
+        </div>
+        <div class="field">
+          <label>Phone number</label>
+          <input type="tel" name="emergencyPhone">
+        </div>
+      </div>
+    </section>
+
+    <!-- 11 Payment method -->
+    <section class="block" id="sec-payment" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10H21" stroke="currentColor" stroke-width="1.8"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 11</span><h2>Preferred payment method</h2></div>
+      </div>
+      <p class="block-desc">How you'd prefer to pay rent each month.</p>
+      <div class="grid">
+        <div class="field span-2">
+          <div class="radio-row">
+            <label><input type="radio" name="paymentMethod" value="Cash App" checked>Cash App</label>
+            <label><input type="radio" name="paymentMethod" value="Chime">Chime</label>
+            <label><input type="radio" name="paymentMethod" value="PayPal">PayPal</label>
+            <label><input type="radio" name="paymentMethod" value="Venmo">Venmo</label>
+          </div>
+        </div>
+        <div class="field span-2">
+          <label>Username / handle for selected method <span class="hint">Optional, helps us set up payments faster</span></label>
+          <input type="text" name="paymentHandle" placeholder="e.g. $YourCashtag or @YourVenmo">
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 Consent & signature -->
+    <section class="block" id="sec-signature" data-section>
+      <div class="block-head">
+        <div class="block-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20C7 20 7 14 10 14C13 14 13 20 16 20C18 20 18.5 17 20 17" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M15 6L19 10L9 20H5V16L15 6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+        <div class="head-text"><span class="step-label">Section 12</span><h2>Consent &amp; signature</h2></div>
+      </div>
+      <p class="block-desc">Please read and confirm before submitting.</p>
+      <div class="consent">
+        <label>
+          <input type="checkbox" name="consentAccuracy" required>
+          I certify that the information provided in this application is true and complete to the best of my knowledge.
+        </label>
+        <label>
+          <input type="checkbox" name="consentScreening" required>
+          I authorize the landlord or property manager to verify this information, including income, rental history, and background, as part of a screening process.
+        </label>
+      </div>
+      <div class="sig-row">
+        <div class="sig-field">
+          <label>Signature <span class="required-mark">*</span> <span class="hint">Type your full name</span></label>
+          <input type="text" class="sig-input" name="signature" required>
+          <div class="error-msg">Type your name to sign.</div>
+        </div>
+        <div class="sig-field date-field">
+          <label>Date</label>
+          <input type="date" name="signatureDate">
+        </div>
+      </div>
+    </section>
+
+    <div class="form-status" id="formStatus"></div>
+
+    <div class="submit-bar">
+      <div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit application</button>
+        <button type="button" class="btn btn-ghost" id="printBtn" style="margin-left:10px;">Print / save as PDF</button>
+      </div>
+      <span class="submit-hint">Fields marked <span class="required-mark">*</span> are required.</span>
+    </div>
+  </form>
+</div>
+
+<div class="confirm-panel" id="confirmPanel">
+  <div class="confirm-card">
+    <div class="confirm-icon">
+      <svg width="30" height="30" viewBox="0 0 52 52" fill="none">
+        <path d="M15 27L22 34L37 18" stroke="#B9852B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Application received</h2>
+    <p>Thank you for applying. We'll review your application and reach out using your preferred contact method to confirm your tour and next steps.</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  const form = document.getElementById('rentalForm');
+  const sections = document.querySelectorAll('[data-section]');
+  const navLinks = document.querySelectorAll('#stepsNav a');
+  const statusBox = document.getElementById('formStatus');
+  const submitBtn = document.getElementById('submitBtn');
+
+  // ---------- Scrollspy for the sidebar ----------
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          navLinks.forEach((l) =>
+            l.classList.toggle('active', l.getAttribute('href') === '#' + id)
+          );
+        }
+      });
+    },
+    { rootMargin: '-20% 0px -70% 0px' }
+  );
+  sections.forEach((s) => spy.observe(s));
+
+  // ---------- Scroll reveal ----------
+  const reveal = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          reveal.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.08 }
+  );
+  sections.forEach((s) => reveal.observe(s));
+
+  // ---------- Conditional panels ----------
+  function toggle(condition, panel) {
+    panel.classList.toggle('show', condition);
+  }
+
+  const voucherCheckbox = document.getElementById('hasVoucher');
+  const voucherPanel = document.getElementById('voucherPanel');
+  voucherCheckbox.addEventListener('change', () =>
+    toggle(voucherCheckbox.checked, voucherPanel)
+  );
+
+  const petPanel = document.getElementById('petPanel');
+  document.querySelectorAll('input[name="hasPet"]').forEach((r) => {
+    r.addEventListener('change', () =>
+      toggle(
+        document.querySelector('input[name="hasPet"]:checked').value === 'Yes',
+        petPanel
+      )
+    );
+  });
+
+  const crimePanel = document.getElementById('crimePanel');
+  document.querySelectorAll('input[name="hasCrimeRecord"]').forEach((r) => {
+    r.addEventListener('change', () =>
+      toggle(
+        document.querySelector('input[name="hasCrimeRecord"]:checked').value ===
+          'Yes',
+        crimePanel
+      )
+    );
+  });
+
+  // ---------- Default signature date to today ----------
+  const sigDate = form.querySelector('input[name="signatureDate"]');
+  sigDate.value = new Date().toISOString().split('T')[0];
+
+  // ---------- Validation ----------
+  const requiredFields = form.querySelectorAll('[required]');
+
+  function validate() {
+    let valid = true;
+    let firstInvalid = null;
+    requiredFields.forEach((f) => {
+      const fieldWrap = f.closest('.field') || f.closest('.consent');
+      const ok = f.type === 'checkbox' ? f.checked : f.value.trim() !== '';
+      if (fieldWrap && fieldWrap.classList.contains('field')) {
+        fieldWrap.classList.toggle('invalid', !ok);
+      }
+      if (!ok) {
+        valid = false;
+        if (!firstInvalid) firstInvalid = f;
+      }
+    });
+    return { valid, firstInvalid };
+  }
+
+  function showStatus(message, type) {
+    statusBox.textContent = message;
+    statusBox.className = 'form-status show ' + type;
+  }
+
+  function clearStatus() {
+    statusBox.className = 'form-status';
+    statusBox.textContent = '';
+  }
+
+  // ---------- Build a plain object from the form ----------
+  function collectFormData() {
+    const data = {};
+    new FormData(form).forEach((value, key) => {
+      data[key] = value;
+    });
+    data.hasVoucher = voucherCheckbox.checked;
+    data.consentAccuracy = form.querySelector(
+      'input[name="consentAccuracy"]'
+    ).checked;
+    data.consentScreening = form.querySelector(
+      'input[name="consentScreening"]'
+    ).checked;
+    return data;
+  }
+
+  // ---------- Submit ----------
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    clearStatus();
+
+    const { valid, firstInvalid } = validate();
+    if (!valid) {
+      if (firstInvalid) {
+        firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      showStatus('Please fill in the required fields highlighted above.', 'error');
+      return;
+    }
+
+    const payload = collectFormData();
+
+    submitBtn.disabled = true;
+    showStatus('Submitting your application…', 'loading');
+
+    try {
+      const response = await fetch('/submit-application', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Server responded with an error');
+      }
+
+      document.querySelector('.layout').style.display = 'none';
+      document.querySelector('.hero').style.display = 'none';
+      document.getElementById('confirmPanel').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showStatus(
+        'Something went wrong sending your application. Please try again in a moment.',
+        'error'
+      );
+      submitBtn.disabled = false;
+    }
+  });
+
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
+})();
+</script>
+
+</body>
+</html>

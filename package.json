@@ -1,0 +1,14 @@
+{
+  "name": "rental-application",
+  "version": "1.0.0",
+  "description": "Website rental application form with a Node.js backend that logs and emails submissions.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemailer": "^6.9.14",
+    "dotenv": "^16.4.5"
+  }
+}
