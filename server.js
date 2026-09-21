@@ -7,17 +7,22 @@ const { Resend } = require('resend');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ---------- Resend setup ----------
+if (!process.env.RESEND_API_KEY) {
+  console.error('Missing RESEND_API_KEY in .env');
+  process.exit(1);
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Builds a readable plain-text summary of the application
 function formatApplication(data) {
-  const line = (label, value) => `${label}: ${value || '—'}`;
+  const line = (label, value) => `${label}: ${value || '-'}`;
 
   return [
     '=== NEW RENTAL APPLICATION ===',
@@ -103,21 +108,20 @@ app.post('/submit-application', async (req, res) => {
   const summary = formatApplication(data);
   console.log('\n' + summary + '\n');
 
-  // Send via Resend API (works on Render Free Tier)
   try {
-    await resend.emails.send({
-      from: 'onboarding@resend.dev',
-      to: 'enioladickson63x@gmail.com',
+    const result = await resend.emails.send({
+      from: 'Rental App <onboarding@resend.dev>',
+      to: 'enioladickson63@gmail.com',
       replyTo: data.email,
-      subject: `New rental application — ${data.fullName}`,
+      subject: `New rental application - ${data.fullName}`,
       text: summary,
     });
 
-    console.log('Email sent successfully via Resend');
+    console.log('Email sent successfully via Resend:', result);
     res.json({ ok: true });
   } catch (err) {
-    console.error('Failed to send email:', err.message);
-    res.status(500).json({ ok: false, error: 'Email delivery failed.' });
+    console.error('[Resend API Error]:', err);
+    res.status(500).json({ ok: false, error: 'Email delivery failed: ' + (err.message || 'unknown') });
   }
 });
 
