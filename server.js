@@ -1,10 +1,9 @@
 // server.js
-// Serves the rental application website and handles form submissions:
-// every submission is printed to the Node.js console AND emailed to you.
+// Fixed for Render Free Tier - uses Resend API instead of Gmail SMTP
 
 require('dotenv').config();
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const path = require('path');
 
 const app = express();
@@ -13,18 +12,8 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ---------- Email transporter ----------
-// Configure these in a .env file (see .env.example).
-// Works with Gmail (using an App Password), Outlook, or any SMTP provider.
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false, // true for port 465, false for 587/others
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// ---------- Resend setup ----------
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Builds a readable plain-text summary of the application
 function formatApplication(data) {
@@ -112,25 +101,22 @@ app.post('/submit-application', async (req, res) => {
   }
 
   const summary = formatApplication(data);
-
-  // 1) Show it in the Node.js console
   console.log('\n' + summary + '\n');
 
-  // 2) Email it to you
+  // Send via Resend API (works on Render Free Tier)
   try {
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
+    await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: 'enioladickson63x@gmail.com',
       replyTo: data.email,
       subject: `New rental application — ${data.fullName}`,
       text: summary,
     });
 
+    console.log('Email sent successfully via Resend');
     res.json({ ok: true });
   } catch (err) {
     console.error('Failed to send email:', err.message);
-    // The submission was still logged above, so we don't lose it —
-    // but tell the browser something went wrong so it can inform the applicant.
     res.status(500).json({ ok: false, error: 'Email delivery failed.' });
   }
 });
